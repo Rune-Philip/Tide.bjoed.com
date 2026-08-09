@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#161826">
+<meta name="description" content="Tidevand, strøm og månefase for Svinø Strand — Tide, current and moon phase for Svinø Strand.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23161826'/%3E%3Cpath d='M3 20c4-6 8 6 13 0s9 4 13-2' stroke='%239184d9' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<title>Tidevand · Svinø Strand</title>
+<link rel="stylesheet" href="ds/styles.css">
+<script src="ds/_ds_bundle.js"></script>
+<style>
+  body { margin: 0; background: var(--color-bg); }
+  a { color: var(--color-accent-300); text-decoration: none; }
+  a:hover { color: var(--color-accent); }
+  @keyframes svPulse { 0%,100% { opacity: .55; } 50% { opacity: 1; } }
+</style>
+</helmet>
+<div style="min-height:100vh;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body);display:flex;justify-content:center">
+<div style="width:100%;max-width:480px;padding:0 0 48px;position:relative">
+
+  <header style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:20px 20px 12px">
+    <div style="min-width:0">
+      <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-neutral-400);font-family:var(--font-heading)">{{ t.kicker }}</div>
+      <h1 style="margin:4px 0 0;font-family:var(--font-heading);font-weight:500;font-size:26px;line-height:1.1;letter-spacing:-.01em">Svinø Strand</h1>
+      <div style="margin-top:5px;font-size:12px;color:var(--color-neutral-400);font-variant-numeric:tabular-nums">{{ clock }} · {{ t.source }}</div>
+    </div>
+    <button onClick="{{ toggleLang }}" title="Dansk / English" style="flex:none;display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:0;padding:0;cursor:pointer;color:inherit">
+      <span style="display:block;width:56px;height:56px;border-radius:999px;background:radial-gradient(circle at 50% 45%, var(--color-neutral-800), var(--color-bg));box-shadow:var(--shadow-md);overflow:hidden">
+        <svg viewBox="-56 -56 112 112" width="56" height="56" aria-hidden="true">
+          <circle cx="0" cy="0" r="46" fill="var(--color-neutral-800)"></circle>
+          <path d="{{ moonPath }}" fill="var(--color-neutral-100)"></path>
+          <circle cx="0" cy="0" r="46" fill="none" stroke="var(--color-neutral-700)" stroke-width="1"></circle>
+        </svg>
+      </span>
+      <span style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-neutral-400);font-family:var(--font-heading)">{{ langLabel }}</span>
+    </button>
+  </header>
+
+  <section style="position:relative;margin:4px 0 0;background:linear-gradient(180deg,var(--color-bg),var(--color-neutral-900) 60%,var(--color-bg))">
+    <div style="position:relative;width:100%;aspect-ratio:400/480;overflow:hidden;background:#0e1019">
+      <div style="position:absolute;inset:0;filter:brightness(2.55) contrast(1.04) saturate(.9) hue-rotate(-14deg)">
+        <div style="position:absolute;left:50%;top:50%;width:0;height:0">
+          <img src="https://a.basemaps.cartocdn.com/dark_all/14/8724/5171@2x.png" alt="" style="position:absolute;left:-356px;top:-391px;width:256px;height:256px;max-width:none;display:block"></img>
+          <img src="https://a.basemaps.cartocdn.com/dark_all/14/8724/5172@2x.png" alt="" style="position:absolute;left:-356px;top:-135px;width:256px;height:256px;max-width:none;display:block"></img>
+          <img src="https://a.basemaps.cartocdn.com/dark_all/14/8724/5173@2x.png" alt="" style="position:absolute;left:-356px;top:121px;width:256px;height:256px;max-width:none;display:block"></img>
+          <img src="https://a.basemaps.cartocdn.com/dark_all/14/8725/5171@2x.png" alt="" style="position:absolute;left:-100px;top:-391px;width:256px;height:256px;max-width:none;display:block"></img>
+          <img src="https://a.basemaps.cartocdn.com/dark_all/14/8725/5172@2x.png" alt="" style="position:absolute;left:-100px;top:-135px;width:256px;height:256px;max-width:none;display:block"></img>
+          <img src="https://a.basemaps.cartocdn.com/dark_all/14/8725/5173@2x.png" alt="" style="position:absolute;left:-100px;top:121px;width:256px;height:256px;max-width:none;display:block"></img>
+          <img src="https://a.basemaps.cartocdn.com/dark_all/14/8726/5171@2x.png" alt="" style="position:absolute;left:156px;top:-391px;width:256px;height:256px;max-width:none;display:block"></img>
+          <img src="https://a.basemaps.cartocdn.com/dark_all/14/8726/5172@2x.png" alt="" style="position:absolute;left:156px;top:-135px;width:256px;height:256px;max-width:none;display:block"></img>
+          <img src="https://a.basemaps.cartocdn.com/dark_all/14/8726/5173@2x.png" alt="" style="position:absolute;left:156px;top:121px;width:256px;height:256px;max-width:none;display:block"></img>
+        </div>
+      </div>
+      <div style="position:absolute;inset:0;background:#3a4a92;mix-blend-mode:color;opacity:.66;pointer-events:none"></div>
+      <div style="position:absolute;inset:0;background:linear-gradient(150deg,rgba(46,54,128,.2),rgba(30,34,72,.08) 55%,rgba(46,54,128,.18));pointer-events:none"></div>
+
+      <canvas ref="{{ canvasRef }}" style="position:absolute;inset:0;width:100%;height:100%;display:block"></canvas>
+
+      <div style="position:absolute;inset:0;pointer-events:none;font-family:var(--font-heading)">
+        <div style="position:absolute;left:calc(50% - 11px);top:calc(50% - 51px);width:0;height:0">
+          <div style="position:absolute;left:-19px;top:-19px;width:38px;height:38px;border:1px solid var(--color-accent);border-radius:999px;opacity:.24;animation:svPulse 3.4s ease-in-out infinite"></div>
+          <div style="position:absolute;left:16px;top:-19px;font-size:9px;letter-spacing:.2em;color:var(--color-neutral-100);white-space:nowrap;text-shadow:0 1px 5px rgba(14,16,25,.98),0 0 12px rgba(14,16,25,.9)">{{ t.channel }}</div>
+        </div>
+        <div style="position:absolute;left:calc(50% - 5px);top:calc(50% + 41px);width:0;height:0">
+          <div style="position:absolute;left:-4px;top:-4px;width:8px;height:8px;border:1.6px solid var(--color-accent-300);border-radius:999px"></div>
+          <div style="position:absolute;left:-6px;top:9px;font-size:10px;letter-spacing:.08em;color:var(--color-neutral-100);white-space:nowrap;text-shadow:0 1px 5px rgba(14,16,25,.98),0 0 12px rgba(14,16,25,.9)">{{ t.beach }}</div>
+        </div>
+        <div style="position:absolute;left:calc(50% + 14px);top:calc(50% + 29px);width:0;height:0">
+          <div style="position:absolute;left:-3px;top:-3px;width:6px;height:6px;background:var(--color-accent)"></div>
+          <div style="position:absolute;left:10px;top:-6px;font-size:9px;letter-spacing:.04em;color:var(--color-neutral-300);white-space:nowrap;text-shadow:0 1px 5px rgba(14,16,25,.98),0 0 12px rgba(14,16,25,.9)">Rosenvænget 3</div>
+        </div>
+        <div style="position:absolute;left:calc(50% + 21px);top:calc(50% + 49px);width:0;height:0">
+          <div style="position:absolute;left:-3px;top:-3px;width:6px;height:6px;background:var(--color-accent)"></div>
+          <div style="position:absolute;left:10px;top:-6px;font-size:9px;letter-spacing:.04em;color:var(--color-neutral-300);white-space:nowrap;text-shadow:0 1px 5px rgba(14,16,25,.98),0 0 12px rgba(14,16,25,.9)">Rosenvænget 9</div>
+        </div>
+        <div style="position:absolute;left:6%;top:12%;font-size:8.5px;letter-spacing:.28em;color:var(--color-neutral-400);white-space:nowrap;text-shadow:0 1px 6px rgba(14,16,25,.9)">{{ t.westLabel }}</div>
+        <div style="position:absolute;right:6%;top:26%;font-size:8.5px;letter-spacing:.28em;color:var(--color-neutral-400);white-space:nowrap;text-shadow:0 1px 6px rgba(14,16,25,.9)">{{ t.eastLabel }}</div>
+        <div style="position:absolute;right:10px;top:10px;display:flex;flex-direction:column;align-items:center;gap:2px;opacity:.75">
+          <svg viewBox="-6 -14 12 24" width="10" height="20"><path d="M0,-13 L4.4,7 L0,3.4 L-4.4,7 Z" fill="var(--color-neutral-300)"></path></svg>
+          <span style="font-size:8px;letter-spacing:.1em;color:var(--color-neutral-400)">N</span>
+        </div>
+      </div>
+
+      <div style="position:absolute;left:0;right:0;bottom:0;padding:64px 20px 20px;background:linear-gradient(180deg,rgba(22,24,38,0),rgba(22,24,38,.5) 14%,rgba(22,24,38,.86) 26%,var(--color-bg) 42%);pointer-events:none">
+        <div style="display:flex;align-items:baseline;gap:10px">
+          <span style="font-family:var(--font-heading);font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--color-accent-300)">{{ dirLabel }}</span>
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:14px;margin-top:2px">
+          <div style="font-family:var(--font-heading);font-weight:500;font-size:60px;line-height:.95;letter-spacing:-.03em;font-variant-numeric:tabular-nums">{{ speedText }}</div>
+          <div style="padding-bottom:9px">
+            <div style="font-size:13px;color:var(--color-neutral-300)">{{ t.knots }}</div>
+            <div style="font-size:11px;color:var(--color-neutral-500);font-variant-numeric:tabular-nums">{{ rateText }}</div>
+          </div>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:22px;flex-wrap:wrap">
+          <div>
+            <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-neutral-500);font-family:var(--font-heading)">{{ nextLabel }}</div>
+            <div style="font-size:17px;font-variant-numeric:tabular-nums;margin-top:2px">{{ nextTime }} <span style="color:var(--color-neutral-400);font-size:13px">{{ nextIn }}</span></div>
+          </div>
+          <div>
+            <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-neutral-500);font-family:var(--font-heading)">{{ t.level }}</div>
+            <div style="font-size:17px;font-variant-numeric:tabular-nums;margin-top:2px">{{ levelText }}</div>
+          </div>
+        </div>
+      </div>
+      <div style="position:absolute;left:20px;bottom:5px;font-size:8px;letter-spacing:.03em;color:var(--color-neutral-500);opacity:.9;pointer-events:none">© OpenStreetMap · CARTO</div>
+    </div>
+  </section>
+
+  <section style="padding:22px 20px 0">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+      <h2 style="margin:0;font-family:var(--font-heading);font-weight:500;font-size:15px;letter-spacing:.02em">{{ t.curve }}</h2>
+      <span style="font-size:11px;color:var(--color-neutral-500)">{{ t.curveNote }}</span>
+    </div>
+    <div style="margin-top:12px;border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);background:var(--color-neutral-900);padding:12px 10px 8px">
+      <svg viewBox="0 0 340 120" preserveAspectRatio="none" style="width:100%;height:130px;display:block">
+        <defs>
+          <linearGradient id="svFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#9184d9" stop-opacity=".30"></stop>
+            <stop offset="1" stop-color="#9184d9" stop-opacity="0"></stop>
+          </linearGradient>
+        </defs>
+        <line x1="0" y1="60" x2="340" y2="60" stroke="var(--color-neutral-800)" stroke-width="1" stroke-dasharray="3 4"></line>
+        <path d="{{ curveFill }}" fill="url(#svFill)"></path>
+        <path d="{{ curvePath }}" fill="none" stroke="var(--color-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        <line x1="{{ nowX }}" y1="4" x2="{{ nowX }}" y2="116" stroke="var(--color-neutral-500)" stroke-width="1"></line>
+        <circle cx="{{ nowX }}" cy="{{ nowY }}" r="4" fill="var(--color-bg)" stroke="var(--color-accent)" stroke-width="2"></circle>
+      </svg>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--color-neutral-500);font-variant-numeric:tabular-nums;padding:2px 2px 0">
+        <span>{{ curveT0 }}</span><span>{{ curveT1 }}</span><span>{{ curveT2 }}</span><span>{{ curveT3 }}</span>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:22px 20px 0">
+    <h2 style="margin:0 0 12px;font-family:var(--font-heading);font-weight:500;font-size:15px">{{ t.today }}</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(74px,1fr));gap:8px">
+      <sc-for list="{{ todayExtremes }}" as="e" hint-placeholder-count="4">
+        <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:10px 10px 11px;background:var(--color-neutral-900)">
+          <div style="font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--color-neutral-500);font-family:var(--font-heading)">{{ e.label }}</div>
+          <div style="font-size:19px;font-variant-numeric:tabular-nums;margin-top:3px">{{ e.time }}</div>
+          <div style="font-size:11px;color:var(--color-accent-300);font-variant-numeric:tabular-nums">{{ e.cm }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="padding:22px 20px 0">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:13px 13px 14px;background:var(--color-neutral-900)">
+        <div style="font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--color-neutral-500);font-family:var(--font-heading)">{{ t.waterTemp }}</div>
+        <div style="font-size:26px;font-family:var(--font-heading);font-weight:500;margin-top:4px;font-variant-numeric:tabular-nums">{{ sstText }}</div>
+        <div style="font-size:11px;color:var(--color-neutral-500);margin-top:2px">{{ sstNote }}</div>
+      </div>
+      <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:13px 13px 14px;background:var(--color-neutral-900)">
+        <div style="font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--color-neutral-500);font-family:var(--font-heading)">{{ t.sun }}</div>
+        <div style="display:flex;gap:14px;margin-top:6px">
+          <div>
+            <div style="font-size:17px;font-variant-numeric:tabular-nums">{{ sunrise }}</div>
+            <div style="font-size:10px;color:var(--color-neutral-500)">{{ t.sunrise }}</div>
+          </div>
+          <div>
+            <div style="font-size:17px;font-variant-numeric:tabular-nums">{{ sunset }}</div>
+            <div style="font-size:10px;color:var(--color-neutral-500)">{{ t.sunset }}</div>
+          </div>
+        </div>
+      </div>
+      <div style="grid-column:1/-1;border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);padding:13px;background:var(--color-neutral-900);display:flex;align-items:center;gap:14px">
+        <svg viewBox="-56 -56 112 112" width="42" height="42" style="flex:none">
+          <circle cx="0" cy="0" r="46" fill="var(--color-neutral-800)"></circle>
+          <path d="{{ moonPath }}" fill="var(--color-neutral-100)"></path>
+        </svg>
+        <div style="min-width:0">
+          <div style="font-size:14px">{{ moonName }} · {{ moonPct }}</div>
+          <div style="font-size:11px;color:var(--color-neutral-500);margin-top:3px">{{ moonNext }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:22px 20px 0">
+    <h2 style="margin:0 0 12px;font-family:var(--font-heading);font-weight:500;font-size:15px">{{ t.week }}</h2>
+    <div style="border:1px solid var(--color-neutral-800);border-radius:var(--radius-md);background:var(--color-neutral-900);overflow:hidden">
+      <sc-for list="{{ week }}" as="d" hint-placeholder-count="7">
+        <div style="display:flex;align-items:center;gap:12px;padding:11px 13px;border-top:1px solid var(--color-neutral-800)">
+          <div style="width:64px;flex:none;font-size:12px;color:var(--color-neutral-300);font-family:var(--font-heading);letter-spacing:.04em">{{ d.day }}</div>
+          <div style="flex:1;min-width:0;display:flex;gap:6px;flex-wrap:wrap">
+            <sc-for list="{{ d.events }}" as="ev" hint-placeholder-count="4">
+              <span style="font-size:11.5px;font-variant-numeric:tabular-nums;color:var(--color-neutral-200);border:1px solid var(--color-neutral-800);border-radius:999px;padding:2px 8px">{{ ev.arrow }} {{ ev.time }}</span>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <footer style="padding:26px 20px 0;font-size:10.5px;line-height:1.6;color:var(--color-neutral-500)">{{ t.footer }}</footer>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:430,&quot;height&quot;:1500},&quot;currentGain&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:45,&quot;min&quot;:20,&quot;max&quot;:120,&quot;step&quot;:2,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Model&quot;,&quot;unit&quot;:&quot; kn per m/h&quot;}}">
+const STRINGS = {
+  da: {
+    kicker: 'Tidevand', source: 'DMI Karrebæksminde', channel: 'LØBET', beach: 'Svinø Strand',
+    westLabel: 'SMÅLANDSFARVANDET', eastLabel: 'FJORDEN',
+    knots: 'knob', level: 'Vandstand', curve: 'Vandstand · 24 timer', curveNote: '−6 t → +18 t',
+    today: 'I dag', waterTemp: 'Vandtemperatur', sun: 'Sol', sunrise: 'op', sunset: 'ned',
+    week: '7 dage', rising: 'Vandet stiger — ind i fjorden', falling: 'Vandet falder — ud mod havet',
+    slack: 'Stillestående vand', high: 'Højvande', low: 'Lavvande', nextHigh: 'Næste højvande', nextLow: 'Næste lavvande',
+    now: 'nu', inTime: 'om',
+    moon: ['Nymåne','Tiltagende måne','Første kvarter','Tiltagende måne','Fuldmåne','Aftagende måne','Sidste kvarter','Aftagende måne'],
+    belyst: 'belyst', nextNew: 'Nymåne', nextFull: 'Fuldmåne',
+    footer: 'Astronomisk forudsigelse fra DMI’s tidevandstabel for Karrebæksminde 2026, i forhold til middelvandstand. Vind og lufttryk kan flytte vandstanden væsentligt mere end tidevandet selv. Strømhastigheden er et skøn beregnet ud fra vandstandens ændringshastighed — brug den som pejling, ikke som facit.',
+    loading: 'henter…', unavailable: 'ikke tilgængelig'
+  },
+  en: {
+    kicker: 'Tide', source: 'DMI Karrebæksminde', channel: 'THE CHANNEL', beach: 'Svinø Strand',
+    westLabel: 'SMÅLANDSFARVANDET', eastLabel: 'THE FJORD',
+    knots: 'knots', level: 'Water level', curve: 'Water level · 24 hours', curveNote: '−6 h → +18 h',
+    today: 'Today', waterTemp: 'Water temp', sun: 'Sun', sunrise: 'rise', sunset: 'set',
+    week: '7 days', rising: 'Flooding — running into the fjord', falling: 'Ebbing — running out to sea',
+    slack: 'Slack water', high: 'High water', low: 'Low water', nextHigh: 'Next high water', nextLow: 'Next low water',
+    now: 'now', inTime: 'in',
+    moon: ['New moon','Waxing crescent','First quarter','Waxing gibbous','Full moon','Waning gibbous','Last quarter','Waning crescent'],
+    belyst: 'lit', nextNew: 'New moon', nextFull: 'Full moon',
+    footer: 'Astronomical prediction from DMI’s 2026 tide table for Karrebæksminde, relative to mean sea level. Wind and air pressure can move the water considerably more than the tide itself. The current speed is an estimate derived from the rate of water-level change — treat it as a guide, not a fact.',
+    loading: 'loading…', unavailable: 'unavailable'
+  }
+};
+
+const DAYS_DA = ['Søn','Man','Tir','Ons','Tor','Fre','Lør'];
+const DAYS_EN = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const SYNODIC = 29.530588853;
+const LAT = 55.1245, LON = 11.7191;
+
+class Component extends DCLogic {
+  state = {
+    lang: (typeof localStorage !== 'undefined' && localStorage.getItem('svino-lang')) || 'da',
+    now: Date.now(), pts: null, sst: null, sunrise: null, sunset: null, err: null
+  };
+
+  componentDidMount() {
+    this.loadTides();
+    this.loadWeather();
+    this._timer = setInterval(() => this.setState({ now: Date.now() }), 20000);
+    this._flow = { v: 0, dir: 1 };
+    this.startFlow();
+  }
+  componentWillUnmount() {
+    clearInterval(this._timer);
+    if (this._raf) cancelAnimationFrame(this._raf);
+  }
+
+  async loadTides() {
+    try {
+      const r = await fetch('data/tides-2026.json');
+      const j = await r.json();
+      this.setState({ pts: j.points });
+    } catch (e) { this.setState({ err: 'tide' }); }
+  }
+
+  async loadWeather() {
+    try {
+      const u = 'https://api.open-meteo.com/v1/forecast?latitude=' + LAT + '&longitude=' + LON +
+        '&daily=sunrise,sunset&timezone=Europe%2FCopenhagen&forecast_days=1';
+      const j = await (await fetch(u)).json();
+      if (j.daily) this.setState({ sunrise: j.daily.sunrise[0].slice(11, 16), sunset: j.daily.sunset[0].slice(11, 16) });
+    } catch (e) {}
+    try {
+      const u = 'https://marine-api.open-meteo.com/v1/marine?latitude=' + LAT + '&longitude=' + LON +
+        '&hourly=sea_surface_temperature&timezone=Europe%2FCopenhagen&forecast_days=1';
+      const j = await (await fetch(u)).json();
+      if (j.hourly && j.hourly.sea_surface_temperature) {
+        const h = new Date().getHours();
+        const vals = j.hourly.sea_surface_temperature;
+        let v = vals[h];
+        if (v == null) v = vals.find(x => x != null);
+        if (v != null) this.setState({ sst: v });
+      }
+    } catch (e) {}
+  }
+
+  // ---- tide maths -------------------------------------------------
+  bracket(pts, tMin) {
+    let lo = 0, hi = pts.length - 1;
+    if (tMin <= pts[0][0] || tMin >= pts[hi][0]) return null;
+    while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (pts[mid][0] <= tMin) lo = mid; else hi = mid; }
+    return lo;
+  }
+  levelAt(pts, tMin) {
+    const i = this.bracket(pts, tMin);
+    if (i == null) return null;
+    const [t1, h1] = pts[i], [t2, h2] = pts[i + 1];
+    const span = t2 - t1, x = (tMin - t1) / span, a = (h1 + h2) / 2, b = (h2 - h1) / 2;
+    const h = a - b * Math.cos(Math.PI * x);
+    const dhdt = b * Math.PI * Math.sin(Math.PI * x) / span * 60; // m per hour
+    return { h, dhdt, next: i + 1 };
+  }
+
+  fmtTime(ms) {
+    return new Date(ms).toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Copenhagen' });
+  }
+  fmtDur(ms, T) {
+    const m = Math.max(0, Math.round(ms / 60000));
+    const h = Math.floor(m / 60), mm = m % 60;
+    return T.inTime + ' ' + (h ? h + ' t ' : '') + mm + ' min';
+  }
+
+  // ---- moon -------------------------------------------------------
+  moonPhase(ms) {
+    const jd = ms / 86400000 + 2440587.5;
+    let p = ((jd - 2451550.1) / SYNODIC) % 1;
+    if (p < 0) p += 1;
+    return p;
+  }
+  moonPathFor(p) {
+    const r = 46, ang = 2 * Math.PI * p, cosA = Math.cos(ang), waxing = p < 0.5;
+    const rx = Math.abs(r * cosA);
+    const outer = waxing ? 1 : 0;
+    const term = ((cosA > 0) === waxing) ? 0 : 1;
+    return 'M 0 ' + (-r) + ' A ' + r + ' ' + r + ' 0 0 ' + outer + ' 0 ' + r +
+           ' A ' + rx.toFixed(2) + ' ' + r + ' 0 0 ' + term + ' 0 ' + (-r) + ' Z';
+  }
+  nextPhaseTime(now, target) {
+    const base = 2451550.1;
+    const jdNow = now / 86400000 + 2440587.5;
+    let k = Math.ceil(((jdNow - base) / SYNODIC) - target);
+    let jd = base + (k + target) * SYNODIC;
+    if (jd < jdNow) jd += SYNODIC;
+    return (jd - 2440587.5) * 86400000;
+  }
+
+  // ---- flow canvas ------------------------------------------------
+  startFlow() {
+    if (!this.canvas) { this._raf = requestAnimationFrame(() => this.startFlow()); return; }
+    // geometry in map pixels relative to the map centre (web-mercator z14),
+    // so the flow tracks the real channel on the tiles. Throat = Løbet at 55.1245,11.7191.
+    const lines = [
+      [[-330, -250], [-190, -180], [-70, -92], [-21, -61], [35, -8], [110, 45], [250, 108]],
+      [[-330, -190], [-190, -140], [-70, -80], [-18, -58], [40, -20], [120, 20], [260, 62]],
+      [[-330, -130], [-190, -100], [-70, -62], [-15, -55], [45, -30], [130, 0], [260, 30]],
+      [[-330, -70], [-190, -60], [-70, -52], [-12, -51], [50, -40], [140, -25], [260, -10]],
+      [[-330, -10], [-190, -20], [-70, -42], [-9, -48], [55, -55], [145, -55], [260, -55]],
+      [[-330, 50], [-190, 20], [-70, -30], [-6, -45], [55, -70], [140, -90], [260, -105]],
+      [[-330, 110], [-190, 60], [-70, -18], [-3, -42], [50, -88], [135, -125], [260, -155]],
+      [[-330, 170], [-190, 105], [-70, -5], [0, -39], [48, -105], [130, -160], [260, -205]],
+      [[-330, 232], [-190, 150], [-70, 8], [3, -36], [45, -122], [125, -192], [250, -252]]
+    ];
+
+    const bez = (p, t) => {
+      const u = 1 - t;
+      const x = u * u * u * p[0][0] + 3 * u * u * t * p[1][0] + 3 * u * t * t * p[2][0] + t * t * t * p[3][0];
+      const y = u * u * u * p[0][1] + 3 * u * u * t * p[1][1] + 3 * u * t * t * p[2][1] + t * t * t * p[3][1];
+      return [x, y];
+    };
+    const at = (L, s) => {
+      if (s < 0.5) return bez([L[0], L[1], L[2], L[3]], s * 2);
+      return bez([L[3], L[4], L[5], L[6]], (s - 0.5) * 2);
+    };
+    const parts = [];
+    lines.forEach((L) => {
+      const n = 58;
+      for (let i = 0; i < n; i++) parts.push({
+        L,
+        s: Math.random(),
+        len: 0.012 + Math.random() * 0.022,
+        w: 0.6 + Math.random() * 0.7,
+        a: 0.7 + Math.random() * 0.3,
+        j: (Math.random() - 0.5) * 5,
+        ph: Math.random() * 6.28
+      });
+    });
+
+    let last = performance.now();
+    const draw = (ts) => {
+      const dt = Math.min(60, ts - last); last = ts;
+      const cv = this.canvas;
+      if (!cv) { this._raf = requestAnimationFrame(draw); return; }
+      const ctx = cv.getContext('2d');
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      const w = cv.clientWidth, h = cv.clientHeight;
+      if (cv.width !== Math.round(w * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+      const sc = dpr, ox = cv.width / 2, oy = cv.height / 2;
+      ctx.clearRect(0, 0, cv.width, cv.height);
+      const f = this._flow, mag = Math.min(1, f.v / 1.8);
+      const speed = (0.00006 + 0.00030 * mag) * dt * f.dir;
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.shadowColor = 'rgba(46,32,140,0.95)';
+      ctx.shadowBlur = 2.6 * sc;
+      for (const p of parts) {
+        p.s += speed;
+        if (p.s > 1.12) p.s -= 1.24; if (p.s < -0.12) p.s += 1.24;
+        const s0 = Math.max(0, Math.min(1, p.s)), s1 = Math.max(0, Math.min(1, p.s - p.len * f.dir));
+        if (s0 === s1) continue;
+        const A = at(p.L, s0), B = at(p.L, s1);
+        const edge = Math.min(1, Math.min(s0, 1 - s0) * 6);
+        let dx = A[0] - B[0], dy = A[1] - B[1];
+        const dl = Math.hypot(dx, dy) || 1;
+        // spread away from the throat so the flow reads as a funnel, not a pinhole
+        const spread = p.j * (0.28 + 0.72 * Math.min(1, Math.abs(s0 - 0.5) * 2.2))
+          + Math.sin(ts * 0.0006 + p.ph) * 0.7;
+        const nx2 = (-dy / dl) * spread, ny2 = (dx / dl) * spread;
+        ctx.beginPath();
+        ctx.moveTo(ox + (A[0] + nx2) * sc, oy + (A[1] + ny2) * sc);
+        ctx.lineTo(ox + (B[0] + nx2) * sc, oy + (B[1] + ny2) * sc);
+        ctx.strokeStyle = 'rgba(72,52,196,' + (p.a * (0.45 + 0.55 * mag) * edge).toFixed(3) + ')';
+        ctx.lineWidth = p.w * sc;
+        ctx.lineCap = 'round';
+        ctx.stroke();
+      }
+      ctx.shadowBlur = 0;
+      ctx.globalCompositeOperation = 'source-over';
+      const chevrons = [[-150, -18, -24], [-11, -51, -42], [122, -84, -50]];
+      for (const [cxp, cyp, deg] of chevrons) {
+        const a = (deg + (f.dir < 0 ? 180 : 0)) * Math.PI / 180;
+        const ca = Math.cos(a), sa = Math.sin(a), L = 7.5, Wd = 7;
+        const tip = [cxp + ca * L, cyp + sa * L];
+        const bk = (sgn) => [cxp - ca * L + -sa * sgn * Wd, cyp - sa * L + ca * sgn * Wd];
+        const p1 = bk(1), p2 = bk(-1);
+        ctx.beginPath();
+        ctx.moveTo(ox + p1[0] * sc, oy + p1[1] * sc);
+        ctx.lineTo(ox + tip[0] * sc, oy + tip[1] * sc);
+        ctx.lineTo(ox + p2[0] * sc, oy + p2[1] * sc);
+        ctx.strokeStyle = 'rgba(56,40,170,' + (0.55 + 0.4 * mag).toFixed(2) + ')';
+        ctx.lineWidth = 2 * sc;
+        ctx.lineJoin = 'round';
+        ctx.stroke();
+      }
+      this._raf = requestAnimationFrame(draw);
+    };
+    this._raf = requestAnimationFrame(draw);
+  }
+
+  // ---- render -----------------------------------------------------
+  renderVals() {
+    const lang = this.state.lang, T = STRINGS[lang], now = this.state.now;
+    const gain = this.props.currentGain ?? 45;
+    const days = lang === 'da' ? DAYS_DA : DAYS_EN;
+    const out = {
+      t: T, lang,
+      langLabel: lang === 'da' ? 'DA' : 'EN',
+      toggleLang: () => {
+        const nx = this.state.lang === 'da' ? 'en' : 'da';
+        try { localStorage.setItem('svino-lang', nx); } catch (e) {}
+        this.setState({ lang: nx });
+      },
+      canvasRef: (el) => { this.canvas = el; },
+      clock: this.fmtTime(now)
+    };
+
+    // moon
+    const p = this.moonPhase(now);
+    const illum = (1 - Math.cos(2 * Math.PI * p)) / 2;
+    out.moonPath = this.moonPathFor(p);
+    out.moonName = T.moon[Math.round(p * 8) % 8];
+    out.moonPct = Math.round(illum * 100) + '% ' + T.belyst;
+    const dfmt = (ms) => new Date(ms).toLocaleDateString(lang === 'da' ? 'da-DK' : 'en-GB', { day: 'numeric', month: 'short', timeZone: 'Europe/Copenhagen' });
+    out.moonNext = T.nextFull + ' ' + dfmt(this.nextPhaseTime(now, 0.5)) + ' · ' + T.nextNew + ' ' + dfmt(this.nextPhaseTime(now, 0));
+
+    out.sunrise = this.state.sunrise || '—';
+    out.sunset = this.state.sunset || '—';
+    out.sstText = this.state.sst != null ? this.state.sst.toFixed(1) + '°' : '—';
+    out.sstNote = this.state.sst != null ? 'Open-Meteo' : T.unavailable;
+
+    const pts = this.state.pts;
+    if (!pts) {
+      Object.assign(out, {
+        dirLabel: T.loading, speedText: '—', rateText: '', nextLabel: T.nextHigh, nextTime: '—', nextIn: '',
+        levelText: '—', curvePath: '', curveFill: '', nowX: 170, nowY: 60,
+        curveT0: '', curveT1: '', curveT2: '', curveT3: '', todayExtremes: [], week: []
+      });
+      return out;
+    }
+
+    const tMin = now / 60000;
+    const cur = this.levelAt(pts, tMin);
+    if (!cur) {
+      Object.assign(out, {
+        dirLabel: lang === 'da' ? 'Uden for tabellen (2026)' : 'Outside the 2026 table',
+        speedText: '—', rateText: '', nextLabel: T.nextHigh, nextTime: '—', nextIn: '',
+        levelText: '—', curvePath: '', curveFill: '', nowX: 170, nowY: 60,
+        curveT0: '', curveT1: '', curveT2: '', curveT3: '', todayExtremes: [], week: []
+      });
+      return out;
+    }
+
+    const rising = cur.dhdt >= 0;
+    const knots = Math.abs(cur.dhdt) * gain;
+    this._flow = { v: knots, dir: rising ? 1 : -1 };
+
+    out.dirLabel = knots < 0.12 ? T.slack : (rising ? T.rising : T.falling);
+    out.speedText = knots.toFixed(1);
+    out.rateText = (rising ? '+' : '−') + Math.abs(cur.dhdt * 100).toFixed(1) + ' cm/t';
+    out.levelText = (cur.h >= 0 ? '+' : '−') + Math.abs(cur.h * 100).toFixed(0) + ' cm';
+
+    const nx = pts[cur.next];
+    const nxRising = nx[1] > pts[cur.next - 1][1];
+    out.nextLabel = nxRising ? T.nextHigh : T.nextLow;
+    out.nextTime = this.fmtTime(nx[0] * 60000);
+    out.nextIn = this.fmtDur(nx[0] * 60000 - now, T);
+
+    // 24h curve: -6h .. +18h
+    const t0 = tMin - 360, t1 = tMin + 1080;
+    const samples = [];
+    for (let i = 0; i <= 144; i++) {
+      const t = t0 + (t1 - t0) * (i / 144);
+      const L = this.levelAt(pts, t);
+      samples.push([t, L ? L.h : 0]);
+    }
+    const hs = samples.map(s => s[1]);
+    let lo = Math.min(...hs), hi = Math.max(...hs);
+    const pad = Math.max(0.01, (hi - lo) * 0.25); lo -= pad; hi += pad;
+    const X = t => 4 + 332 * (t - t0) / (t1 - t0);
+    const Y = h => 110 - 100 * (h - lo) / (hi - lo);
+    out.curvePath = samples.map((s, i) => (i ? 'L' : 'M') + X(s[0]).toFixed(1) + ' ' + Y(s[1]).toFixed(1)).join(' ');
+    out.curveFill = out.curvePath + ' L336 118 L4 118 Z';
+    out.nowX = X(tMin).toFixed(1);
+    out.nowY = Y(cur.h).toFixed(1);
+    out.curveT0 = this.fmtTime(t0 * 60000);
+    out.curveT1 = this.fmtTime((t0 + (t1 - t0) / 3) * 60000);
+    out.curveT2 = this.fmtTime((t0 + 2 * (t1 - t0) / 3) * 60000);
+    out.curveT3 = this.fmtTime(t1 * 60000);
+
+    // today's extremes
+    const dayKey = (ms) => new Date(ms).toLocaleDateString('sv-SE', { timeZone: 'Europe/Copenhagen' });
+    const today = dayKey(now);
+    out.todayExtremes = [];
+    for (let i = 1; i < pts.length; i++) {
+      const ms = pts[i][0] * 60000;
+      if (dayKey(ms) !== today) continue;
+      const isHigh = pts[i][1] > pts[i - 1][1];
+      out.todayExtremes.push({
+        label: isHigh ? T.high : T.low,
+        time: this.fmtTime(ms),
+        cm: (pts[i][1] >= 0 ? '+' : '−') + Math.abs(pts[i][1] * 100).toFixed(0) + ' cm'
+      });
+    }
+
+    // 7 days
+    const buckets = new Map();
+    for (let i = 1; i < pts.length; i++) {
+      const ms = pts[i][0] * 60000;
+      if (ms < now - 86400000 || ms > now + 7 * 86400000) continue;
+      const k = dayKey(ms);
+      if (!buckets.has(k)) buckets.set(k, []);
+      buckets.get(k).push({ arrow: pts[i][1] > pts[i - 1][1] ? '▲' : '▼', time: this.fmtTime(ms) });
+    }
+    out.week = [...buckets.entries()].filter(([k]) => k >= today).slice(0, 7).map(([k, events]) => {
+      const d = new Date(k + 'T12:00:00');
+      return { day: k === today ? T.today : days[d.getDay()] + ' ' + d.getDate() + '.', events };
+    });
+
+    return out;
+  }
+}
+</script>
+</body>
+</html>
